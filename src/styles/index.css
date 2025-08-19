@@ -1,0 +1,26 @@
+/* apps/frontend/src/styles/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* คอมโพเนนต์ที่ใช้บ่อย */
+@layer components {
+  .card {
+    @apply rounded-2xl bg-white/5 text-white shadow-card ring-1 ring-white/10 backdrop-blur;
+  }
+  .btn-primary {
+    /* เลี่ยง bg-primary-500 → ใช้ 600/700 แทน (สวยและชัดบนพื้นเข้ม) */
+    @apply inline-flex items-center justify-center rounded-lg
+           bg-primary-600 hover:bg-primary-700
+           text-white px-4 py-2 font-semibold transition
+           ring-1 ring-white/10;
+  }
+  .input {
+    @apply w-full px-3 py-2 rounded-lg bg-white/5
+           ring-1 ring-white/10 focus:ring-2 focus:ring-brand-gold/40
+           outline-none placeholder-white/50;
+  }
+  .tag {
+    @apply px-2 py-0.5 rounded bg-white/10 text-xs;
+  }
+}
