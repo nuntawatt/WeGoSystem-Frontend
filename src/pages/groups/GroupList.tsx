@@ -1,0 +1,49 @@
+// List of groups for a selected event (from query ?event=)
+import { useMemo } from 'react';
+import { useSearchParams, Link } from 'react-router-dom';
+import { DEMO_EVENTS, DEMO_GROUPS } from '../../lib/demoData';
+
+export default function GroupsList() {
+  const [sp] = useSearchParams();
+  const eventId = sp.get('event');
+
+  const event = useMemo(() => DEMO_EVENTS.find((e) => e.id === eventId), [eventId]);
+  const groups = useMemo(() => DEMO_GROUPS.filter((g) => g.eventId === eventId), [eventId]);
+
+  return (
+    <section className="mx-auto max-w-5xl px-4 py-8 text-white space-y-6">
+      <header className="space-y-2">
+        <h3 className="text-2xl font-extrabold">Groups</h3>
+        {event ? (
+          <div className="flex items-center gap-3">
+            <img src={event.cover} className="h-14 w-20 object-cover rounded" />
+            <div>
+              <div className="font-bold">{event.title}</div>
+              <div className="text-sm opacity-80">{event.location}</div>
+            </div>
+          </div>
+        ) : (
+          <div className="opacity-80 text-sm">เลือกกิจกรรมจากหน้า Explore เพื่อดูรายชื่อกลุ่ม</div>
+        )}
+      </header>
+
+      <div className="grid sm:grid-cols-2 gap-4">
+        {groups.map((g) => (
+          <div key={g.id} className="card p-4 space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="font-semibold">{g.name}</div>
+              <div className="text-xs opacity-80">{g.members}{g.max ? ` / ${g.max}` : ''} members</div>
+            </div>
+            <div className="text-sm opacity-90">{g.description ?? 'ยินดีต้อนรับสมาชิกใหม่!'}</div>
+            <div className="flex gap-2 pt-2">
+              <Link to={`/groups/${g.id}`} className="btn-primary">เข้ากลุ่ม/แชต</Link>
+              <Link to={`/groups/${g.id}/schedule`} className="px-4 py-2 rounded-lg ring-1 ring-white/20 hover:bg-white/10 transition">นัดเวลา</Link>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {!groups.length && <div className="opacity-80">ยังไม่มีกลุ่มสำหรับกิจกรรมนี้</div>}
+    </section>
+  );
+}

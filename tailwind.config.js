@@ -1,33 +1,34 @@
-// apps/frontend/tailwind.config.js
-/** @type {import('tailwindcss').Config} */
+// Purpose: Theme deep-blue + gold, shadows for cards
 export default {
   content: ['./index.html', './src/**/*.{ts,tsx,js,jsx}'],
   theme: {
     extend: {
       colors: {
-        // โทนหลัก: deep blue family
         primary: {
-          50:  '#eef2ff',
-          100: '#e0e7ff',
-          200: '#c7d2fe',
-          300: '#a5b4fc',
-          400: '#818cf8',
-          500: '#1d3b78',
-          600: '#173264',
-          700: '#132a57',
-          800: '#0f234a',
-          900: '#0b1a3a',
+          50: '#eff6ff',
+          100: '#dbeafe',
+          200: '#bfdbfe',
+          300: '#93c5fd',
+          400: '#60a5fa',
+          500: '#3b82f6',
+          600: '#2563eb',
+          700: '#1d4ed8',
+          800: '#1e40af',
+          900: '#0b1a3a' // deep blue background
         },
         brand: {
-          gold:  '#C9A067',
-          choco: '#2A120A',
-        },
+          gold: '#C9A067',
+          choco: '#2A120A'
+        }
       },
       boxShadow: {
-        card: '0 4px 14px rgba(0,0,0,0.25)',     
-        'brand-soft': '0 6px 22px rgba(0,0,0,.35)',
+        card: '0 10px 30px rgba(0,0,0,.35)',
+        'brand-soft': '0 6px 22px rgba(0,0,0,.35)'
       },
-    },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif']
+      }
+    }
   },
-  plugins: [],
+  plugins: []
 };

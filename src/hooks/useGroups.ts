@@ -1,17 +1,13 @@
-// apps/frontend/src/hooks/useGroups.ts
+// Purpose: demo groups hook (can plug API later)
 import { useQuery } from '@tanstack/react-query';
-import api from '../lib/apiClient';
+export type Group = { id: string; name: string; members: number; tags: string[] };
 
-export const useGroups = () => {
-  return useQuery({
+export function useGroups() {
+  return useQuery<Group[]>({
     queryKey: ['groups'],
-    queryFn: async () => {
-      try {
-        const { data } = await api.get('/groups');
-        return data;
-      } catch {
-        return [{ _id: 'g1', name: 'Hikers', members: ['Alice', 'Bob'] }];
-      }
-    }
+    queryFn: async () => [
+      { id: 'g1', name: 'Runners CNX', members: 12, tags: ['running'] },
+      { id: 'g2', name: 'Indie Music Fans', members: 8, tags: ['music'] }
+    ]
   });
-};
+}

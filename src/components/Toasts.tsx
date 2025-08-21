@@ -1,24 +1,32 @@
-// apps/frontend/src/components/Toasts.tsx
+// Purpose: simple global toast bus + hook
 import { useEffect, useState } from 'react';
 
+let pushFn: ((msg: string) => void) | null = null;
+export function toast(msg: string) {
+  pushFn?.(msg);
+}
+
 export default function Toasts() {
-  const [toasts, setToasts] = useState<{ id: number; text: string }[]>([]);
+  const [items, setItems] = useState<string[]>([]);
   useEffect(() => {
-    const handler = (e: CustomEvent<{ text: string }>) => {
-      setToasts((t) => [...t, { id: Date.now(), text: e.detail.text }]);
-      setTimeout(() => setToasts((t) => t.slice(1)), 3000);
+    pushFn = (m: string) => {
+      setItems((s) => [...s, m]);
+      setTimeout(() => setItems((s) => s.slice(1)), 2500);
     };
-    window.addEventListener('app:toast' as any, handler as any);
-    return () => window.removeEventListener('app:toast' as any, handler as any);
+    return () => {
+      pushFn = null;
+    };
   }, []);
   return (
-    <div className="fixed bottom-4 right-4 space-y-2">
-      {toasts.map((t) => (
-        <div key={t.id} className="card px-4 py-2">{t.text}</div>
+    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[60] space-y-2">
+      {items.map((m, i) => (
+        <div
+          key={i}
+          className="px-4 py-2 rounded-xl bg-black/70 ring-1 ring-white/10 text-white shadow-card"
+        >
+          {m}
+        </div>
       ))}
     </div>
   );
 }
-
-export const toast = (text: string) =>
-  window.dispatchEvent(new CustomEvent('app:toast', { detail: { text } }));

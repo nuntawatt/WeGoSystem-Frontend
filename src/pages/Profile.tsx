@@ -1,53 +1,55 @@
+// Purpose: Profile editor with Firestore storage
+import { useState, useEffect } from 'react';
+import { useProfile } from '../hooks/useProfile';
 import { useAuth } from '../hooks/useAuth';
-import { auth } from '../lib/firebase';
-import { signOut } from 'firebase/auth';
+import TagSelector from '../components/TagSelector';
+import { toast } from '../components/Toasts';
 
 export default function Profile() {
-  const { user, loading } = useAuth();
+  const { user } = useAuth();
+  const { data, isLoading, updateProfile } = useProfile();
+  const [displayName, setDisplayName] = useState('');
+  const [bio, setBio] = useState('');
+  const [interests, setInterests] = useState<string[]>([]);
 
-  if (loading) {
-    return (
-      <section className="max-w-3xl mx-auto p-6">
-        <div className="card p-6 animate-pulse">Loading profile…</div>
-      </section>
-    );
-  }
+  useEffect(() => {
+    if (data) {
+      setDisplayName(data.displayName || user?.email || '');
+      setBio(data.bio || '');
+      setInterests(data.interests || []);
+    }
+  }, [data, user]);
 
-  if (!user) {
-    return (
-      <section className="max-w-3xl mx-auto p-6">
-        <div className="card p-6 text-center">
-          <p className="opacity-90">Sign in to view profile.</p>
-          <a href="/auth/signin" className="btn-primary inline-block mt-4">Go to Sign in</a>
-        </div>
-      </section>
-    );
-  }
+  const save = async () => {
+    try {
+      await updateProfile({ displayName, bio, interests });
+      toast('Profile updated');
+    } catch {
+      toast('Failed to update profile');
+    }
+  };
+
+  if (!user) return <div className="card p-4">Please sign in to view profile.</div>;
+  if (isLoading) return <div className="card p-4">Loading…</div>;
 
   return (
-    <section className="max-w-3xl mx-auto p-6 space-y-6">
-      <div className="card p-6 flex items-center gap-4">
-        <div className="h-16 w-16 rounded-full bg-gradient-to-br from-blue-500 to-indigo-700 grid place-items-center text-white text-xl font-bold">
-          {user.email?.[0]?.toUpperCase() ?? 'U'}
+    <section className="grid md:grid-cols-2 gap-6">
+      <div className="card p-4 space-y-3">
+        <h3 className="text-xl font-semibold">Your Profile</h3>
+        <input className="input" value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
+        <textarea className="input h-28" value={bio} onChange={(e) => setBio(e.target.value)} />
+        <div>
+          <div className="text-sm font-medium mb-1">Interests</div>
+          <TagSelector value={interests} onChange={setInterests} />
         </div>
-        <div className="flex-1 min-w-0">
-          <h1 className="text-2xl font-bold truncate">{user.email}</h1>
-          <p className="text-sm opacity-80 truncate">UID: {user.uid}</p>
-        </div>
-        <button className="btn-primary" onClick={() => signOut(auth)}>Logout</button>
+        <button className="btn-primary w-full" onClick={save}>Save</button>
       </div>
-
-      <div className="grid md:grid-cols-2 gap-4">
-        <div className="card p-5">
-          <h3 className="font-semibold mb-2">Interests (coming soon)</h3>
-          <p className="opacity-80 text-sm">Tag your interests to get better activity matches.</p>
-        </div>
-        <div className="card p-5">
-          <h3 className="font-semibold mb-2">Privacy</h3>
-          <ul className="text-sm list-disc ml-5 opacity-90 space-y-1">
-            <li>Your email is private by default</li>
-            <li>Block/report features available in groups</li>
-          </ul>
+      <div className="card p-4">
+        <div className="text-sm opacity-80">Email</div>
+        <div className="text-lg font-semibold">{user.email}</div>
+        <div className="mt-4">
+          <div className="text-sm opacity-80">UID</div>
+          <div className="text-xs break-all opacity-90">{user.uid}</div>
         </div>
       </div>
     </section>

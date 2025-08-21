@@ -1,18 +1,29 @@
-// apps/frontend/src/lib/i18n.ts
-export const t = (key: string, locale: 'en' | 'th' = 'en') => {
-  const dict: Record<string, Record<string, string>> = {
-    en: {
+// Purpose: i18n scaffold (EN/TH sample)
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+
+const resources = {
+  en: {
+    common: {
       explore_title: 'Explore Activities',
-      join: 'Join',
-      create: 'Create',
-      availability: 'Availability'
-    },
-    th: {
-      explore_title: 'สำรวจกิจกรรม',
-      join: 'เข้าร่วม',
-      create: 'สร้าง',
-      availability: 'ช่วงเวลาว่าง'
+      create_title: 'Create Activity',
+      profile_title: 'Your Profile'
     }
-  };
-  return (dict[locale] && dict[locale][key]) || key;
+  },
+  th: {
+    common: {
+      explore_title: 'สำรวจกิจกรรม',
+      create_title: 'สร้างกิจกรรม',
+      profile_title: 'โปรไฟล์ของคุณ'
+    }
+  }
 };
+
+i18n.use(initReactI18next).init({
+  resources,
+  lng: 'en',
+  fallbackLng: 'en',
+  interpolation: { escapeValue: false }
+});
+
+export default i18n;

@@ -2,13 +2,17 @@
   "compilerOptions": {
     "target": "ES2022",
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "jsx": "react-jsx",
     "module": "ESNext",
-    "moduleResolution": "bundler",
-    "noEmit": true,
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "allowJs": false,
     "strict": true,
     "skipLibCheck": true,
-    "types": ["vite/client", "vitest/globals"]
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "types": ["vite/client"],
+    "baseUrl": ".",
+    "paths": { "@/*": ["src/*"] }
   },
   "include": ["src", "vite.config.ts"]
 }

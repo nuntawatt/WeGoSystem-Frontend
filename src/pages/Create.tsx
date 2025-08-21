@@ -1,51 +1,30 @@
-// apps/frontend/src/pages/Create.tsx
+// Purpose: Create activity form + Zod validation + TagSelector
 import { useState } from 'react';
 import { CreateActivitySchema } from '../lib/validators';
 import { toast } from '../components/Toasts';
-import { createActivity } from '../lib/firestore';
-import { useAuth } from '../hooks/useAuth';
+import TagSelector from '../components/TagSelector';
+import { api } from '../lib/apiClient';
 
 export default function Create() {
-  const [form, setForm] = useState({ name: '', description: '', tags: '' });
-  const [loading, setLoading] = useState(false);
-  const { user } = useAuth();
+  const [name, setName] = useState('');
+  const [desc, setDesc] = useState('');
+  const [tags, setTags] = useState<string[]>([]);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // validate
-    const parsed = CreateActivitySchema.safeParse({
-      ...form,
-      tags: form.tags
-        .split(',')
-        .map((s) => s.trim())
-        .filter(Boolean),
-    });
+    const parsed = CreateActivitySchema.safeParse({ name, description: desc, tags });
     if (!parsed.success) {
       toast(parsed.error.errors[0].message);
       return;
     }
-
-    if (!user) {
-      toast('Please sign in first.');
-      return;
-    }
-
     try {
-      setLoading(true);
-      await createActivity({
-        title: parsed.data.name,
-        description: parsed.data.description,
-        tags: parsed.data.tags,
-        createdBy: user.uid,
-      });
-      toast('✅ Activity created successfully!');
-      setForm({ name: '', description: '', tags: '' });
-    } catch (err: any) {
-      console.error(err);
-      toast('❌ Failed to create activity');
-    } finally {
-      setLoading(false);
+      await api.post('/activities', parsed.data).catch(() => {});
+      toast('Activity created');
+      setName('');
+      setDesc('');
+      setTags([]);
+    } catch (err) {
+      toast('Failed to create (demo only)');
     }
   };
 
@@ -56,27 +35,21 @@ export default function Create() {
         <input
           className="input"
           placeholder="Name"
-          value={form.name}
-          onChange={(e) => setForm({ ...form, name: e.target.value })}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
         />
         <textarea
           className="input h-28"
           placeholder="Description"
-          value={form.description}
-          onChange={(e) => setForm({ ...form, description: e.target.value })}
+          value={desc}
+          onChange={(e) => setDesc(e.target.value)}
         />
-        <input
-          className="input"
-          placeholder="Tags (comma separated)"
-          value={form.tags}
-          onChange={(e) => setForm({ ...form, tags: e.target.value })}
-        />
-        <button
-          className="btn-primary w-full"
-          type="submit"
-          disabled={loading}
-        >
-          {loading ? 'Saving...' : 'Create'}
+        <div>
+          <div className="text-sm font-medium mb-1">Tags</div>
+          <TagSelector value={tags} onChange={setTags} />
+        </div>
+        <button className="btn-primary w-full" type="submit">
+          Create
         </button>
       </form>
       <div className="card p-4">

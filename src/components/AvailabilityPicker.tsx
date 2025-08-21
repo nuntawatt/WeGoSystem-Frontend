@@ -1,42 +1,78 @@
-// apps/frontend/src/components/AvailabilityPicker.tsx
-import dayjs from 'dayjs';
-import { useAvailability } from '../hooks/useAvailability';
+// Purpose: Weekly availability grid (simple 7x12 blocks), local state + onSave callback
+import { useEffect, useMemo, useState } from 'react';
+import { toast } from './Toasts';
 
-const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+// 12 blocks → 2h step (0..22)
+const blocks = Array.from({ length: 12 }, (_, i) => i * 2);
+
+export type AvailabilityMap = Record<string, number[]>; // day-> hours[]
 
 export default function AvailabilityPicker() {
-  const { grid, toggleCell, toRanges } = useAvailability(7, 24);
+  const [avail, setAvail] = useState<AvailabilityMap>({});
+
+  useEffect(() => {
+    const raw = localStorage.getItem('wego_availability');
+    if (raw) setAvail(JSON.parse(raw));
+  }, []);
+
+  const toggle = (day: string, hour: number) => {
+    setAvail((s) => {
+      const cur = new Set(s[day] || []);
+      if (cur.has(hour)) cur.delete(hour);
+      else cur.add(hour);
+      return { ...s, [day]: Array.from(cur).sort((a, b) => a - b) };
+    });
+  };
+
+  const count = useMemo(
+    () => Object.values(avail).reduce((acc, arr) => acc + (arr?.length || 0), 0),
+    [avail]
+  );
+
+  const save = () => {
+    localStorage.setItem('wego_availability', JSON.stringify(avail));
+    toast('Availability saved');
+  };
+
   return (
     <div className="card p-4">
-      <h3 className="text-lg font-semibold mb-3">Availability</h3>
-      <div className="grid grid-cols-8 gap-1">
-        <div />
-        {Array.from({ length: 24 }).map((_, h) => (
-          <div key={h} className="text-xs text-center opacity-70">{h}</div>
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="text-lg font-semibold">Your Availability</h3>
+        <button className="btn-primary" onClick={save}>
+          Save
+        </button>
+      </div>
+      <div className="grid grid-cols-[80px_repeat(7,minmax(0,1fr))] gap-2">
+        <div className="opacity-70 text-sm">Hour</div>
+        {days.map((d) => (
+          <div key={d} className="text-center text-sm font-semibold">
+            {d}
+          </div>
         ))}
-        {grid.map((row, d) => (
+
+        {blocks.map((h) => (
           <>
-            <div key={`label-${d}`} className="text-sm opacity-80 py-1">{days[d]}</div>
-            {row.map((on, h) => (
-              <button
-                key={`${d}-${h}`}
-                onClick={() => toggleCell(d, h)}
-                title={`${days[d]} ${h}:00`}
-                className={`h-7 rounded ${on ? 'bg-primary-500' : 'bg-white/10 hover:bg-white/20'}`}
-              />
-            ))}
+            <div key={`label-${h}`} className="text-sm opacity-70">
+              {String(h).padStart(2, '0')}:00
+            </div>
+            {days.map((d) => {
+              const on = avail[d]?.includes(h);
+              return (
+                <button
+                  key={`${d}-${h}`}
+                  className={`h-8 rounded-lg ring-1 ring-white/10 ${
+                    on ? 'bg-emerald-500/70' : 'bg-white/5 hover:bg-white/10'
+                  }`}
+                  onClick={() => toggle(d, h)}
+                  title={`${d} ${h}:00`}
+                />
+              );
+            })}
           </>
         ))}
       </div>
-      <div className="mt-4">
-        <pre className="text-xs opacity-80 whitespace-pre-wrap">
-{JSON.stringify(
-  toRanges().map(r => ({
-    start: dayjs(r.start).format('ddd HH:mm'),
-    end: dayjs(r.end).format('ddd HH:mm')
-  })), null, 2)}
-        </pre>
-      </div>
+      <div className="mt-3 text-sm opacity-80">Selected blocks: {count}</div>
     </div>
   );
 }

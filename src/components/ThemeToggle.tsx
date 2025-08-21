@@ -1,18 +1,19 @@
-// apps/frontend/src/components/ThemeToggle.tsx
+// Purpose: kept for completeness (not used in Navbar)
 import { useEffect, useState } from 'react';
 
 export default function ThemeToggle() {
-  const [scheme, setScheme] = useState<'dark' | 'light'>('dark');
+  const [dark, setDark] = useState(true);
   useEffect(() => {
-    document.documentElement.classList.toggle('dark', scheme === 'dark');
-  }, [scheme]);
+    document.documentElement.classList.toggle('dark', dark);
+  }, [dark]);
   return (
     <button
-      className="rounded-full bg-white/10 ring-1 ring-white/20 px-3 py-2"
-      onClick={() => setScheme((s) => (s === 'dark' ? 'light' : 'dark'))}
+      className="px-2 py-1 rounded-lg ring-1 ring-white/10 hover:bg-white/10"
+      onClick={() => setDark((d) => !d)}
+      aria-label="Toggle theme"
       title="Toggle theme"
     >
-      {scheme === 'dark' ? '🌙' : '☀️'}
+      {dark ? '🌙' : '☀️'}
     </button>
   );
 }

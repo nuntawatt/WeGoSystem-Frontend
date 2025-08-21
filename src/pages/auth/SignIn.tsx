@@ -1,38 +1,40 @@
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../lib/firebase';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+// Purpose: Sign-in with Firebase
 import { useState } from 'react';
+import { SignInSchema } from '../../lib/validators';
 import { toast } from '../../components/Toasts';
+import { auth } from '../../lib/firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function SignIn() {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [pass, setPass] = useState('');
   const nav = useNavigate();
-  const loc = useLocation() as any;
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const parsed = SignInSchema.safeParse({ email, password: pass });
+    if (!parsed.success) return toast(parsed.error.errors[0].message);
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(auth, email, pass);
       toast('Signed in');
-      nav(loc.state?.from?.pathname ?? '/');
-    } catch (e: any) {
-      toast(e.message);
+      nav('/');
+    } catch (err: any) {
+      toast(err?.message || 'Failed to sign in');
     }
   };
 
   return (
-    <section className="max-w-md mx-auto card p-5">
-      <h1 className="text-2xl font-bold mb-4">Sign In</h1>
-      <form className="space-y-3" onSubmit={submit}>
+    <div className="card p-4 max-w-md mx-auto">
+      <h3 className="text-xl font-semibold mb-3">Sign in</h3>
+      <form onSubmit={submit} className="space-y-3">
         <input className="input" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-        <input className="input" placeholder="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        <button className="btn-primary w-full">Sign In</button>
+        <input className="input" placeholder="Password" type="password" value={pass} onChange={(e) => setPass(e.target.value)} />
+        <button className="btn-primary w-full" type="submit">Sign in</button>
+        <div className="text-sm opacity-80 text-center">
+          No account? <Link to="/auth/signup" className="underline">Sign up</Link> · <Link to="/auth/reset" className="underline">Reset password</Link>
+        </div>
       </form>
-      <div className="mt-3 text-sm">
-        <Link to="/auth/reset" className="underline">Forgot password?</Link>
-        <div className="mt-2">No account? <Link to="/auth/signup" className="underline">Sign up</Link></div>
-      </div>
-    </section>
+    </div>
   );
 }

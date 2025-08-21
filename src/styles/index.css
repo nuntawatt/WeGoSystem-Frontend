@@ -1,26 +1,71 @@
-/* apps/frontend/src/styles/index.css */
+/* Purpose: Tailwind + reusable component classes + polished theme */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* คอมโพเนนต์ที่ใช้บ่อย */
+/* ---------- Base (ทำให้ตัวอักษรอ่านง่ายเสมอ) ---------- */
+@layer base {
+  :root { color-scheme: dark; }             /* บอกเบราว์เซอร์ว่าเป็นธีมมืด */
+  html, body, #root { color: white; }
+  body {
+    background: linear-gradient(to bottom, #0f172a, #1e293b, #0f172a);
+    font-family: 'Inter', sans-serif;
+  }
+
+  a { @apply text-white/90 hover:text-white transition; }
+}
+
+/* ---------- Reusable components ---------- */
 @layer components {
   .card {
-    @apply rounded-2xl bg-white/5 text-white shadow-card ring-1 ring-white/10 backdrop-blur;
+    /* เปลี่ยน shadow-card -> shadow-brand-soft (มีใน tailwind.config.ts) */
+    @apply rounded-2xl bg-white/5 text-white shadow-brand-soft ring-1 ring-white/10 backdrop-blur;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+  }
+
   .btn-primary {
-    /* เลี่ยง bg-primary-500 → ใช้ 600/700 แทน (สวยและชัดบนพื้นเข้ม) */
+    /* ใช้สีมาตรฐานของ Tailwind เพื่อเลี่ยงคลาสที่ไม่มีในธีม */
     @apply inline-flex items-center justify-center rounded-lg
-           bg-primary-600 hover:bg-primary-700
+           bg-blue-600 hover:bg-blue-700
            text-white px-4 py-2 font-semibold transition
-           ring-1 ring-white/10;
+           ring-1 ring-white/10 focus:outline-none focus:ring-2 focus:ring-blue-400/60;
   }
+
   .input {
     @apply w-full px-3 py-2 rounded-lg bg-white/5
            ring-1 ring-white/10 focus:ring-2 focus:ring-brand-gold/40
-           outline-none placeholder-white/50;
+           outline-none placeholder-white/50 text-white;
   }
+
   .tag {
-    @apply px-2 py-0.5 rounded bg-white/10 text-xs;
+    @apply px-2 py-0.5 rounded bg-white/10 text-xs text-white/90;
   }
+
+  /* ใช้ทำหัวข้อไล่เฉด (เช่น Explore Activities) */
+  .brand-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(90deg, #ffd27a, #ff8fd6, #7ccfff);
+  }
+
+  /* ชิปสำหรับฟิลเตอร์/แฮชแท็ก */
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-full px-3 py-1
+           bg-white/10 hover:bg-white/15 text-white/90 text-sm transition;
+  }
+}
+
+/* ---------- Utilities เสริมเล็กน้อย ---------- */
+@layer utilities {
+  /* สกรอลบาร์แบบบาง */
+  .thin-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,.25) transparent;
+  }
+  .thin-scrollbar::-webkit-scrollbar { height: 8px; width: 8px; }
+  .thin-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,.25); border-radius: 999px; }
+  .thin-scrollbar::-webkit-scrollbar-track { background: transparent; }
 }

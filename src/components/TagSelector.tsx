@@ -1,40 +1,71 @@
-// apps/frontend/src/components/TagSelector.tsx
+// Purpose: tag input + chips + suggestions
 import { useState } from 'react';
-import clsx from 'clsx';
 
 export default function TagSelector({
-  available,
   value,
-  onChange
+  onChange,
+  suggestions = ['running', 'coffee', 'boardgames', 'hiking', 'music', 'yoga'],
 }: {
-  available: string[];
   value: string[];
-  onChange: (tags: string[]) => void;
+  onChange: (v: string[]) => void;
+  suggestions?: string[];
 }) {
-  const [selected, setSelected] = useState<string[]>(value);
-  const toggle = (tag: string) => {
-    const next = selected.includes(tag)
-      ? selected.filter((t) => t !== tag)
-      : [...selected, tag];
-    setSelected(next);
-    onChange(next);
+  const [input, setInput] = useState('');
+
+  const add = (t: string) => {
+    const tag = t.trim().toLowerCase();
+    if (!tag) return;
+    if (value.includes(tag)) return;
+    onChange([...value, tag]);
+    setInput('');
   };
+  const remove = (t: string) => onChange(value.filter((x) => x !== t));
+
   return (
-    <div className="flex flex-wrap gap-2">
-      {available.map((tag) => (
-        <button
-          key={tag}
-          onClick={() => toggle(tag)}
-          className={clsx(
-            'px-3 py-1 rounded-full ring-1 ring-white/20 transition',
-            selected.includes(tag)
-              ? 'bg-primary-500 text-white'
-              : 'bg-white/10 text-white/90 hover:bg-white/20'
-          )}
-        >
-          #{tag}
+    <div>
+      <div className="flex flex-wrap gap-2 mb-2">
+        {value.map((t) => (
+          <span key={t} className="tag inline-flex items-center gap-2">
+            {t}
+            <button type="button" className="opacity-70 hover:opacity-100" onClick={() => remove(t)}>
+              ✕
+            </button>
+          </span>
+        ))}
+      </div>
+
+      <div className="flex gap-2">
+        <input
+          className="input flex-1"
+          placeholder="Add a tag and press Enter"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              add(input);
+            }
+          }}
+        />
+        <button type="button" className="btn-primary" onClick={() => add(input)}>
+          Add
         </button>
-      ))}
+      </div>
+
+      {!!suggestions.length && (
+        <div className="mt-2 flex flex-wrap gap-2">
+          {suggestions.map((s) => (
+            <button
+              type="button"
+              key={s}
+              className="px-2 py-1 rounded-lg ring-1 ring-white/10 hover:bg-white/10 transition text-sm"
+              onClick={() => add(s)}
+            >
+              + {s}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
