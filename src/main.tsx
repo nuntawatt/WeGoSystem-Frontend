@@ -6,6 +6,7 @@ import App from './App';
 import './styles/index.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from './hooks/useAuth';
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 const qc = new QueryClient();
 

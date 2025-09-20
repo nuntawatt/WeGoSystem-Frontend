@@ -1,71 +1,119 @@
 /* Purpose: Tailwind + reusable component classes + polished theme */
+@import "@fortawesome/fontawesome-free/css/all.min.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ---------- Base (ทำให้ตัวอักษรอ่านง่ายเสมอ) ---------- */
+
+/* ---------- Base ---------- */
 @layer base {
-  :root { color-scheme: dark; }             /* บอกเบราว์เซอร์ว่าเป็นธีมมืด */
-  html, body, #root { color: white; }
+  :root {
+    color-scheme: dark;
+  }
+
+  html,
+  body,
+  #root {
+    color: white;
+    height: 100%;
+  }
+
   body {
-    background: linear-gradient(to bottom, #0f172a, #1e293b, #0f172a);
+    background:
+      radial-gradient(1200px 800px at 10% -10%, rgba(255, 255, 255, .08), transparent),
+      radial-gradient(1200px 800px at 110% 30%, rgba(255, 255, 255, .06), transparent),
+      linear-gradient(180deg, #0b1530, #16233d 40%, #0b1530 100%);
     font-family: 'Inter', sans-serif;
   }
 
-  a { @apply text-white/90 hover:text-white transition; }
+  a {
+    @apply text-white/90 hover:text-white transition;
+  }
 }
 
-/* ---------- Reusable components ---------- */
+/* ---------- Components ---------- */
 @layer components {
-  .card {
-    /* เปลี่ยน shadow-card -> shadow-brand-soft (มีใน tailwind.config.ts) */
-    @apply rounded-2xl bg-white/5 text-white shadow-brand-soft ring-1 ring-white/10 backdrop-blur;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  .container-app {
+    @apply mx-auto w-full max-w-7xl px-4;
   }
+
+  .card {
+    @apply rounded-2xl bg-white/5 text-white shadow-brand-soft ring-1 ring-white/10 backdrop-blur;
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+
   .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, .5);
   }
 
   .btn-primary {
-    /* ใช้สีมาตรฐานของ Tailwind เพื่อเลี่ยงคลาสที่ไม่มีในธีม */
-    @apply inline-flex items-center justify-center rounded-lg
-           bg-blue-600 hover:bg-blue-700
-           text-white px-4 py-2 font-semibold transition
-           ring-1 ring-white/10 focus:outline-none focus:ring-2 focus:ring-blue-400/60;
+    @apply inline-flex items-center justify-center rounded-lg px-4 py-2 font-semibold bg-gradient-to-b from-brand-gold to-brand-gold/80 text-black/90 hover:from-brand-gold/95 hover:to-brand-gold/75 ring-1 ring-black/10 shadow-gold focus:outline-none focus:ring-2 focus:ring-brand-gold/50 active:translate-y-[1px] transition;
+  }
+
+  .btn-ghost {
+    @apply px-4 py-2 rounded-lg ring-1 ring-white/15 hover:bg-white/10 transition text-white;
   }
 
   .input {
-    @apply w-full px-3 py-2 rounded-lg bg-white/5
-           ring-1 ring-white/10 focus:ring-2 focus:ring-brand-gold/40
-           outline-none placeholder-white/50 text-white;
+    @apply w-full rounded-lg bg-white/5 text-white px-3 py-2 ring-1 ring-white/15 focus:ring-2 focus:ring-brand-gold/40 outline-none placeholder-white/50;
+  }
+
+  .label {
+    @apply text-sm text-white/80 mb-1 block;
   }
 
   .tag {
     @apply px-2 py-0.5 rounded bg-white/10 text-xs text-white/90;
   }
 
-  /* ใช้ทำหัวข้อไล่เฉด (เช่น Explore Activities) */
-  .brand-gradient {
-    @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(90deg, #ffd27a, #ff8fd6, #7ccfff);
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-full px-3 py-1 bg-white/10 hover:bg-white/15 text-white/90 text-sm transition;
   }
 
-  /* ชิปสำหรับฟิลเตอร์/แฮชแท็ก */
-  .chip {
-    @apply inline-flex items-center gap-1 rounded-full px-3 py-1
-           bg-white/10 hover:bg-white/15 text-white/90 text-sm transition;
+  .brand-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(90deg, #FFDDAA, #FF97E1, #96D9FF);
   }
 }
 
-/* ---------- Utilities เสริมเล็กน้อย ---------- */
+.brand-logo-rainbow {
+  @apply font-extrabold tracking-wide bg-clip-text text-transparent;
+  background-image: linear-gradient(90deg, #00E5FF, #00F5A0, #FFE066, #FF8A00, #FF4D97, #B366FF);
+  text-shadow:
+    0 1px 0 rgba(0, 0, 0, .20),
+    0 10px 30px rgba(0, 0, 0, .45),
+    0 0 18px rgba(255, 188, 66, .18);
+  /* เงาอุ่น ๆ ให้ตัวอักษรเด่นขึ้น */
+  letter-spacing: .02em;
+  filter: saturate(1.15) contrast(1.08);
+}
+
+
+/* ซ่อนปุ่มโชว์/ล้างรหัสผ่านของ Edge/IE */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+/* ---------- Utilities ---------- */
 @layer utilities {
-  /* สกรอลบาร์แบบบาง */
   .thin-scrollbar {
     scrollbar-width: thin;
-    scrollbar-color: rgba(255,255,255,.25) transparent;
+    scrollbar-color: rgba(255, 255, 255, .25) transparent;
   }
-  .thin-scrollbar::-webkit-scrollbar { height: 8px; width: 8px; }
-  .thin-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,.25); border-radius: 999px; }
-  .thin-scrollbar::-webkit-scrollbar-track { background: transparent; }
+
+  .thin-scrollbar::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+  }
+
+  .thin-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, .25);
+    border-radius: 999px;
+  }
+
+  .thin-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
 }

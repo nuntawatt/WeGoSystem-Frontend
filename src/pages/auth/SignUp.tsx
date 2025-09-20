@@ -1,3 +1,4 @@
+// frontend/src/pages/auth/SignUp.tsx
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
@@ -6,9 +7,10 @@ import { toast } from '../../components/Toasts';
 
 export default function SignUp() {
   const nav = useNavigate();
-  const [name, setName] = useState('');
+  const [name, setName] = useState('');  // ใช้เป็นชื่อผู้ใช้ที่สมัคร
   const [email, setEmail] = useState('');
   const [pw, setPw] = useState('');
+  const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const onSubmit = async (e: React.FormEvent) => {
@@ -20,21 +22,19 @@ export default function SignUp() {
     try {
       setLoading(true);
       const { user } = await createUserWithEmailAndPassword(auth, email, pw);
-      await updateProfile(user, { displayName: name });
+      await updateProfile(user, { displayName: name.trim() });
       toast('สมัครสำเร็จ! 🎉');
       nav('/profile');
     } catch (err: any) {
       const code = String(err?.code || '');
-      // แปลง error ของ Firebase ให้เข้าใจง่าย
       if (code.includes('auth/email-already-in-use')) {
-        toast(
-          'อีเมลนี้มีบัญชีอยู่แล้ว • กด "Sign in" ถ้ามีบัญชี หรือ "Reset password" ถ้าลืมรหัสผ่าน'
-        );
+        toast('อีเมลนี้มีบัญชีอยู่แล้ว • กด "Sign in" หรือ "Reset password"');
       } else if (code.includes('auth/invalid-email')) {
         toast('อีเมลไม่ถูกต้อง');
       } else if (code.includes('auth/weak-password')) {
-        toast('รหัสผ่านอ่อนเกินไป (อย่างน้อย 6 ตัวอักษร)');
+        toast('รหัสผ่านน้อยเกินไป (อย่างน้อย 6 ตัวอักษร)');
       } else {
+        // ★ แก้วงเล็บ/แบ็กทิค
         toast(`สมัครไม่สำเร็จ: ${err?.message || 'Unknown error'}`);
       }
     } finally {
@@ -43,48 +43,87 @@ export default function SignUp() {
   };
 
   return (
-    <div className="min-h-[80vh] grid place-items-center">
-      <form onSubmit={onSubmit} className="card w-full max-w-md p-6 space-y-4">
-        <h2 className="text-2xl font-bold text-white">Create account</h2>
+    <section className="container-app py-10">
+      <div className="card p-6 max-w-md mx-auto">
+        <h2 className="text-xl font-semibold mb-4">Create account</h2>
 
-        <input
-          className="input"
-          placeholder="Your name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
+        <form onSubmit={onSubmit} className="space-y-4">
+          {/* Username */}
+          <div>
+            <label className="label" htmlFor="username">Username</label>
+            <input
+              id="username"
+              className="input"
+              placeholder="Username"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              autoComplete="name"
+            />
+          </div>
 
-        <input
-          className="input"
-          placeholder="name@email.com"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+          {/* Email */}
+          <div>
+            <label className="label" htmlFor="email">Email</label>
+            <input
+              id="email"
+              className="input"
+              placeholder="Email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              autoComplete="email"
+            />
+          </div>
 
-        <input
-          className="input"
-          placeholder="Password"
-          type="password"
-          value={pw}
-          onChange={(e) => setPw(e.target.value)}
-        />
+          {/* Password (+ toggle) */}
+          <div>
+            <label className="label" htmlFor="password">Password</label>
+            <div className="relative">
+              <input
+                id="password"
+                className="input pr-10"
+                placeholder="Password"
+                type={showPw ? 'text' : 'password'}
+                value={pw}
+                onChange={(e) => setPw(e.target.value)}
+                autoComplete="new-password"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPw(!showPw)}
+                className="absolute inset-y-0 right-0 px-3 flex items-center text-white/70 hover:text-white"
+                aria-label={showPw ? 'Hide password' : 'Show password'}
+                title={showPw ? 'Hide password' : 'Show password'}
+              >
+                {showPw ? (
+                  // eye-off
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20C5.477 20 1 12 1 12a20.76 20.76 0 0 1 5.06-5.94" />
+                    <path d="M10.73 5.08A11 11 0 0 1 12 4c6.523 0 11 8 11 8a20.76 20.76 0 0 1-4.17 4.92" />
+                    <path d="M14.12 14.12A3 3 0 1 1 9.88 9.88" />
+                    <line x1="1" y1="1" x2="23" y2="23" />
+                  </svg>
+                ) : (
+                  // eye
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path d="M1 12s4.5-8 11-8 11 8 11 8-4.5 8-11 8-11-8-11-8Z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                )}
+              </button>
+            </div>
+          </div>
 
-        <button type="submit" className="btn-primary w-full" disabled={loading}>
-          {loading ? 'Creating…' : 'Sign up'}
-        </button>
+          {/* Submit */}
+          <button type="submit" className="btn-primary w-full" disabled={loading}>
+            {loading ? 'Creating…' : 'Sign up'}
+          </button>
 
-        <p className="text-center text-sm text-white/80">
-          Already have an account?{' '}
-          <Link className="underline" to="/auth/signin">
-            Sign in
-          </Link>
-          {' • '}
-          <Link className="underline" to="/auth/reset">
-            Reset password
-          </Link>
-        </p>
-      </form>
-    </div>
+          <p className="text-sm opacity-80 text-center">
+            Already have an account? <Link className="underline" to="/auth/signin">Sign in</Link>
+          </p>
+        </form>
+      </div>
+    </section>
   );
 }

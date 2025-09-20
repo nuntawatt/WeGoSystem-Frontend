@@ -6,7 +6,7 @@ const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 // 12 blocks → 2h step (0..22)
 const blocks = Array.from({ length: 12 }, (_, i) => i * 2);
 
-export type AvailabilityMap = Record<string, number[]>; // day-> hours[]
+export type AvailabilityMap = Record<string, number[]>;
 
 export default function AvailabilityPicker() {
   const [avail, setAvail] = useState<AvailabilityMap>({});

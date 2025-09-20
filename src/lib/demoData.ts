@@ -24,7 +24,7 @@ export type ReviewItem = {
   user: string;
   rating: number;
   comment: string;
-  at: string; // ISO date
+  at: string; 
 };
 
 export const ALL_TAGS = [

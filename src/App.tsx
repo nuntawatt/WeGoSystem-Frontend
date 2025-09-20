@@ -16,8 +16,8 @@ import Home from './pages/Home';
 import GroupsList from './pages/groups/GroupList';
 import Schedule from './pages/groups/Schedule';
 
+
 export default function App() {
-  const { user } = useAuth();
   return (
     <div className="min-h-screen bg-primary-900">
       <Navbar />
@@ -25,10 +25,11 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/explore" element={<Explore />} />
+
           <Route
             path="/groups"
             element={
-              <ProtectedRoute authed={!!user}>
+              <ProtectedRoute>
                 <GroupsList />
               </ProtectedRoute>
             }
@@ -36,7 +37,7 @@ export default function App() {
           <Route
             path="/groups/:id"
             element={
-              <ProtectedRoute authed={!!user}>
+              <ProtectedRoute>
                 <GroupDetail />
               </ProtectedRoute>
             }
@@ -44,7 +45,7 @@ export default function App() {
           <Route
             path="/groups/:id/schedule"
             element={
-              <ProtectedRoute authed={!!user}>
+              <ProtectedRoute>
                 <Schedule />
               </ProtectedRoute>
             }
@@ -52,7 +53,7 @@ export default function App() {
           <Route
             path="/create"
             element={
-              <ProtectedRoute authed={!!user}>
+              <ProtectedRoute>
                 <Create />
               </ProtectedRoute>
             }
@@ -60,11 +61,12 @@ export default function App() {
           <Route
             path="/profile"
             element={
-              <ProtectedRoute authed={!!user}>
+              <ProtectedRoute>
                 <Profile />
               </ProtectedRoute>
             }
           />
+
           <Route path="/auth/signin" element={<SignIn />} />
           <Route path="/auth/signup" element={<SignUp />} />
           <Route path="/auth/reset" element={<ResetPassword />} />

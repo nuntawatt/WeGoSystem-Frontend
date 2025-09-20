@@ -3,15 +3,18 @@ import { useMemo } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { DEMO_EVENTS, DEMO_GROUPS } from '../../lib/demoData';
 
+
 export default function GroupsList() {
   const [sp] = useSearchParams();
   const eventId = sp.get('event');
 
+
   const event = useMemo(() => DEMO_EVENTS.find((e) => e.id === eventId), [eventId]);
   const groups = useMemo(() => DEMO_GROUPS.filter((g) => g.eventId === eventId), [eventId]);
 
+
   return (
-    <section className="mx-auto max-w-5xl px-4 py-8 text-white space-y-6">
+    <section className="container-app py-8 text-white space-y-6">
       <header className="space-y-2">
         <h3 className="text-2xl font-extrabold">Groups</h3>
         {event ? (
@@ -27,6 +30,7 @@ export default function GroupsList() {
         )}
       </header>
 
+
       <div className="grid sm:grid-cols-2 gap-4">
         {groups.map((g) => (
           <div key={g.id} className="card p-4 space-y-2">
@@ -37,13 +41,14 @@ export default function GroupsList() {
             <div className="text-sm opacity-90">{g.description ?? 'ยินดีต้อนรับสมาชิกใหม่!'}</div>
             <div className="flex gap-2 pt-2">
               <Link to={`/groups/${g.id}`} className="btn-primary">เข้ากลุ่ม/แชต</Link>
-              <Link to={`/groups/${g.id}/schedule`} className="px-4 py-2 rounded-lg ring-1 ring-white/20 hover:bg-white/10 transition">นัดเวลา</Link>
+              <Link to={`/groups/${g.id}/schedule`} className="btn-ghost">นัดเวลา</Link>
             </div>
           </div>
         ))}
       </div>
 
-      {!groups.length && <div className="opacity-80">ยังไม่มีกลุ่มสำหรับกิจกรรมนี้</div>}
+
+      {!groups.length && <div className="card p-6 opacity-90">ยังไม่มีกลุ่มสำหรับกิจกรรมนี้</div>}
     </section>
   );
 }
