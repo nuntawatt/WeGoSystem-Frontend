@@ -1,4 +1,4 @@
-// Purpose: Group page with Chat + Members + Availability + Ratings
+// Group page with Chat + Members + Availability + Ratings
 import { useParams } from 'react-router-dom';
 import MemberList from '../../components/MemberList';
 import ChatPanel from '../../components/ChatPanel';

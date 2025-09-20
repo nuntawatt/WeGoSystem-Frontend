@@ -8,7 +8,6 @@ export default function ResetPassword() {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
 
-
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {

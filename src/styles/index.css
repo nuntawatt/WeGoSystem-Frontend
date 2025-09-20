@@ -4,8 +4,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-/* ---------- Base ---------- */
 @layer base {
   :root {
     color-scheme: dark;
@@ -84,19 +82,15 @@
     0 1px 0 rgba(0, 0, 0, .20),
     0 10px 30px rgba(0, 0, 0, .45),
     0 0 18px rgba(255, 188, 66, .18);
-  /* เงาอุ่น ๆ ให้ตัวอักษรเด่นขึ้น */
   letter-spacing: .02em;
   filter: saturate(1.15) contrast(1.08);
 }
 
-
-/* ซ่อนปุ่มโชว์/ล้างรหัสผ่านของ Edge/IE */
 input[type="password"]::-ms-reveal,
 input[type="password"]::-ms-clear {
   display: none;
 }
 
-/* ---------- Utilities ---------- */
 @layer utilities {
   .thin-scrollbar {
     scrollbar-width: thin;

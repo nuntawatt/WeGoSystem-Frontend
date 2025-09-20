@@ -1,4 +1,3 @@
-// frontend/src/pages/groups/Schedule.tsx
 import { useState } from 'react';
 
 type Slot = { day: string; hour: number };

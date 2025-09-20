@@ -14,7 +14,6 @@ export default function Create() {
   const [desc, setDesc] = useState('');
   const [tags, setTags] = useState<string[]>([]);
 
-  // ใช้ชื่อที่สมัครเป็นตัวแสดงผล
   const userName = useMemo(
     () =>
       (data?.displayName?.trim() ||

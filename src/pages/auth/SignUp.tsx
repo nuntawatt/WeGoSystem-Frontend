@@ -7,7 +7,7 @@ import { toast } from '../../components/Toasts';
 
 export default function SignUp() {
   const nav = useNavigate();
-  const [name, setName] = useState('');  // ใช้เป็นชื่อผู้ใช้ที่สมัคร
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [pw, setPw] = useState('');
   const [showPw, setShowPw] = useState(false);
@@ -48,7 +48,6 @@ export default function SignUp() {
         <h2 className="text-xl font-semibold mb-4">Create account</h2>
 
         <form onSubmit={onSubmit} className="space-y-4">
-          {/* Username */}
           <div>
             <label className="label" htmlFor="username">Username</label>
             <input
@@ -61,7 +60,6 @@ export default function SignUp() {
             />
           </div>
 
-          {/* Email */}
           <div>
             <label className="label" htmlFor="email">Email</label>
             <input
@@ -75,7 +73,6 @@ export default function SignUp() {
             />
           </div>
 
-          {/* Password (+ toggle) */}
           <div>
             <label className="label" htmlFor="password">Password</label>
             <div className="relative">
@@ -114,7 +111,6 @@ export default function SignUp() {
             </div>
           </div>
 
-          {/* Submit */}
           <button type="submit" className="btn-primary w-full" disabled={loading}>
             {loading ? 'Creating…' : 'Sign up'}
           </button>

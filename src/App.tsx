@@ -1,4 +1,4 @@
-// Add routes: Home, Explore, Groups list, Group detail, Schedule
+// routes: Home, Explore, Groups list, Group detail, Schedule
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Explore from './pages/Explore';

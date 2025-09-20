@@ -1,4 +1,4 @@
-// Purpose: App bootstrap + React Query + Router + AuthProvider + global CSS
+// App bootstrap + React Query + Router + AuthProvider + global CSS
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';

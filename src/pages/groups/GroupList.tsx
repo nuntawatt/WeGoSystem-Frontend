@@ -1,4 +1,4 @@
-// List of groups for a selected event (from query ?event=)
+// List of groups for a selected event
 import { useMemo } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { DEMO_EVENTS, DEMO_GROUPS } from '../../lib/demoData';
