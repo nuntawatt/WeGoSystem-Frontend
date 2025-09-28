@@ -21,6 +21,7 @@
     "firebase": "^10.12.2",
     "framer-motion": "^11.0.0",
     "i18next": "^23.10.1",
+    "lucide-react": "^0.544.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-i18next": "^13.5.0",

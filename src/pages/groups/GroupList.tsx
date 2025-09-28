@@ -1,17 +1,18 @@
-// List of groups for a selected event
+// apps/frontend/src/pages/groups/GroupList.tsx
 import { useMemo } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
-import { DEMO_EVENTS, DEMO_GROUPS } from '../../lib/demoData';
-
+import { useSearchParams, useNavigate } from 'react-router-dom';
+import { DEMO_EVENTS, DEMO_GROUPS, GroupItem, joinGroup } from '../../lib/demoData';
 
 export default function GroupsList() {
   const [sp] = useSearchParams();
+  const navigate = useNavigate();
   const eventId = sp.get('event');
 
-
   const event = useMemo(() => DEMO_EVENTS.find((e) => e.id === eventId), [eventId]);
-  const groups = useMemo(() => DEMO_GROUPS.filter((g) => g.eventId === eventId), [eventId]);
-
+  const groups = useMemo<GroupItem[]>(
+    () => DEMO_GROUPS.filter((g) => g.eventId === eventId),
+    [eventId]
+  );
 
   return (
     <section className="container-app py-8 text-white space-y-6">
@@ -30,23 +31,30 @@ export default function GroupsList() {
         )}
       </header>
 
-
       <div className="grid sm:grid-cols-2 gap-4">
         {groups.map((g) => (
           <div key={g.id} className="card p-4 space-y-2">
             <div className="flex items-center justify-between">
               <div className="font-semibold">{g.name}</div>
-              <div className="text-xs opacity-80">{g.members}{g.max ? ` / ${g.max}` : ''} members</div>
+              <div className="text-xs opacity-80">
+                {g.members}{g.max ? ` / ${g.max}` : ''} members
+              </div>
             </div>
             <div className="text-sm opacity-90">{g.description ?? 'ยินดีต้อนรับสมาชิกใหม่!'}</div>
             <div className="flex gap-2 pt-2">
-              <Link to={`/groups/${g.id}`} className="btn-primary">เข้ากลุ่ม/แชต</Link>
-              <Link to={`/groups/${g.id}/schedule`} className="btn-ghost">นัดเวลา</Link>
+              <button
+                onClick={() => {
+                  joinGroup(g.id);
+                  navigate(`/groups/${g.id}`);
+                }}
+                className="btn-primary"
+              >
+                Join & Chat
+              </button>
             </div>
           </div>
         ))}
       </div>
-
 
       {!groups.length && <div className="card p-6 opacity-90">ยังไม่มีกลุ่มสำหรับกิจกรรมนี้</div>}
     </section>

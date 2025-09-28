@@ -16,7 +16,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // ให้ session อยู่หลังรีเฟรช/ปิดแท็บ
     setPersistence(auth, browserLocalPersistence).catch(() => {});
 
     const off = onAuthStateChanged(auth, (u) => {

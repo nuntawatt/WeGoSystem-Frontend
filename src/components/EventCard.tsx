@@ -1,8 +1,22 @@
-// A pretty activity card with cover image + tags + join button
-import { EventItem } from '../lib/demoData';
-import { Link } from 'react-router-dom';
+// apps/frontend/src/components/EventCard.tsx
+import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { EventItem, DEMO_GROUPS } from '../lib/demoData';
 
 export default function EventCard({ event }: { event: EventItem }) {
+  const navigate = useNavigate();
+
+  // หา "กลุ่มแรก" ที่อยู่ภายใต้อีเวนต์นี้
+  const firstGroupId = useMemo(() => {
+    const g = DEMO_GROUPS.find((x) => x.eventId === event.id);
+    return g?.id;
+  }, [event.id]);
+
+  const goJoin = () => {
+    if (!firstGroupId) return;
+    navigate(`/groups/${firstGroupId}`);
+  };
+
   return (
     <article className="card overflow-hidden group">
       <div className="relative h-48 sm:h-56 md:h-64">
@@ -25,11 +39,15 @@ export default function EventCard({ event }: { event: EventItem }) {
           ))}
         </div>
 
-        <div className="flex items-center justify-between pt-3">
-          <div className="text-xs opacity-80">
-            {event.location ? `📍 ${event.location}` : 'Online / TBA'}
-          </div>
-          <Link to={`/groups?event=${event.id}`} className="btn-primary">Join Group</Link>
+        <div className="pt-3">
+          <button
+            onClick={goJoin}
+            className="btn-primary"
+            disabled={!firstGroupId}
+            title={!firstGroupId ? 'ยังไม่มีกลุ่มสำหรับอีเวนต์นี้' : 'เข้ากลุ่มและเริ่มแชทในห้องรวม'}
+          >
+            Join & Chat
+          </button>
         </div>
       </div>
     </article>

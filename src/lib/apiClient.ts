@@ -7,13 +7,11 @@ import axios, {
 } from "axios";
 import { auth } from "./firebase";
 
-// สร้าง instance หลัก
 export const api: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:4000",
   timeout: 10000,
 });
 
-// Interceptor สำหรับ request ทุกครั้ง → ใส่ Bearer Token อัตโนมัติ
 api.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
     const user = auth.currentUser;

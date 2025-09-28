@@ -1,4 +1,3 @@
-// Purpose: simple global toast bus + hook
 import { useEffect, useState } from 'react';
 
 let pushFn: ((msg: string) => void) | null = null;

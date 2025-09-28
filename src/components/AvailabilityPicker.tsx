@@ -1,9 +1,8 @@
-// Purpose: Weekly availability grid (simple 7x12 blocks), local state + onSave callback
 import { useEffect, useMemo, useState } from 'react';
 import { toast } from './Toasts';
 
 const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-// 12 blocks → 2h step (0..22)
+
 const blocks = Array.from({ length: 12 }, (_, i) => i * 2);
 
 export type AvailabilityMap = Record<string, number[]>;

@@ -1,14 +1,20 @@
+// apps/frontend/src/components/Navbar.tsx
 import { Link, NavLink } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { auth } from '../lib/firebase';
 import { signOut } from 'firebase/auth';
 import clsx from 'clsx';
-import LogoWeGoIcon from './LogoWeGoIcon';
+import { useProfile } from '../hooks/useProfile';
 
 const APP_NAME = import.meta.env.VITE_APP_NAME || 'WeGo';
 
+function nameFromEmail(email?: string | null) {
+  return email ? (email.split('@')[0] || '') : '';
+}
+
 export default function Navbar() {
   const { user } = useAuth();
+  const { data: profile } = useProfile();
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
     clsx(
@@ -17,9 +23,20 @@ export default function Navbar() {
       isActive && 'underline decoration-2 text-white'
     );
 
+  const displayName =
+    (profile?.displayName?.trim() ||
+      user?.displayName?.trim() ||
+      nameFromEmail(user?.email)) ?? '';
+
+  const avatar = profile?.photoURL || user?.photoURL || '';
+  const first = (displayName || nameFromEmail(user?.email) || '?')
+    .charAt(0)
+    .toUpperCase();
+
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-primary-900/70 backdrop-blur">
       <div className="container-app flex items-center justify-between py-2">
+        {/* Brand */}
         <Link to="/" className="flex items-center gap-3" aria-label={APP_NAME}>
           <span className="text-2xl md:text-3xl font-extrabold leading-none">
             <span className="bg-gradient-to-r from-emerald-400 via-amber-300 to-pink-400 bg-clip-text text-transparent">
@@ -29,20 +46,46 @@ export default function Navbar() {
           </span>
         </Link>
 
+        {/* Nav */}
         <nav className="hidden md:flex items-center gap-6 lg:gap-8">
           <NavLink to="/explore" className={linkClass}>Explore</NavLink>
           <NavLink to="/create" className={linkClass}>Create</NavLink>
 
           {user ? (
-            <>
-              <NavLink to="/profile" className={linkClass}>Profile</NavLink>
-              <button onClick={() => signOut(auth)} className="ml-2 btn-primary rounded-full px-5 py-2">
+            <div className="flex items-center gap-3">
+              {/* Avatar + Name */}
+              <Link
+                to="/profile"
+                className="flex items-center gap-2 rounded-full bg-white/5 hover:bg-white/10 px-3 py-1.5 transition"
+              >
+                <div className="h-8 w-8 rounded-full overflow-hidden grid place-items-center bg-white/10">
+                  {avatar ? (
+                    <img
+                      src={avatar}
+                      alt="avatar"
+                      className="h-full w-full object-cover"
+                      referrerPolicy="no-referrer"
+                    />
+                  ) : (
+                    <span className="text-sm font-semibold">{first}</span>
+                  )}
+                </div>
+                <span className="text-white/90 text-sm font-semibold max-w-[140px] truncate">
+                  {displayName}
+                </span>
+              </Link>
+
+              {/* Log out */}
+              <button
+                onClick={() => signOut(auth)}
+                className="btn-primary rounded-full px-5 py-2"
+              >
                 Log out
               </button>
-            </>
+            </div>
           ) : (
             <>
-              <NavLink to="/auth/signin" className="ml-2 btn-primary rounded-full px-5 py-2"> Sign in</NavLink>
+              <NavLink to="/auth/signin" className="ml-2 btn-primary rounded-full px-5 py-2">Sign in</NavLink>
               <NavLink to="/auth/signup" className="btn-ghost rounded-full px-4 py-2">Sign up</NavLink>
             </>
           )}

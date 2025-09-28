@@ -1,3 +1,5 @@
+// Schedule selection for group members (demo data)
+//import { useMemo } from 'react';
 import { useState } from 'react';
 
 type Slot = { day: string; hour: number };

@@ -17,10 +17,8 @@ export type ActivityDoc = {
   createdAt?: any;
 };
 
-// reference ไปยัง collection "activities"
 const activitiesCol = collection(db, 'activities');
 
-// บันทึกกิจกรรมใหม่
 export async function createActivity(doc: ActivityDoc): Promise<string> {
   const payload = {
     ...doc,
@@ -30,7 +28,6 @@ export async function createActivity(doc: ActivityDoc): Promise<string> {
   return ref.id;
 }
 
-// ดึงกิจกรรมทั้งหมด (ล่าสุดอยู่บนสุด)
 export async function getActivities(): Promise<(ActivityDoc & { id: string })[]> {
   const q = query(activitiesCol, orderBy('createdAt', 'desc'));
   const snap = await getDocs(q);

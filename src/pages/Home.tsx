@@ -1,23 +1,21 @@
-// Landing page (Hero) — drop-in replacement
+// Landing page (Hero) with CTAs
 import { Link } from "react-router-dom";
 
 export default function Home() {
   return (
     <section className="relative overflow-hidden bg-transparent">
-      {/* gradient blobs */}
       <div className="pointer-events-none absolute -top-32 -left-24 h-96 w-96 rounded-full bg-gradient-to-br from-pink-500/20 to-amber-400/20 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-40 -right-24 h-[28rem] w-[28rem] rounded-full bg-gradient-to-tr from-blue-500/20 to-indigo-500/20 blur-3xl" />
 
       <div className="container-app py-16 md:py-24 text-white">
         <div className="grid md:grid-cols-2 gap-12 items-center">
-          {/* Text */}
           <div className="space-y-6 max-w-2xl">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-sm backdrop-blur">
               🎉 เจอเพื่อนไปทำกิจกรรมได้ง่ายขึ้น • จัดกลุ่ม • นัดเวลา • แชต
             </div>
 
             <h1 className="text-4xl md:text-5xl font-extrabold leading-tight tracking-tight">
-              ไปคนเดียวไม่ต้องเหงา<br />
+              ไปคนเดียวไม่ต้องเหงา <br />
               <span className="brand-gradient">
                 เพราะเราจะหาคนไปด้วยให้คุณ
               </span>
@@ -46,15 +44,13 @@ export default function Home() {
               </Link>
             </div>
 
-            {/* Social proof */}
             <div className="flex items-center gap-6 pt-2 text-sm text-white/70">
-              <span>👥 12,500+ ผู้ใช้</span>
-              <span>🗓️ 2,300+ กิจกรรม</span>
+              <span>👥 500+ ผู้ใช้</span>
+              <span>🗓️ 100 กิจกรรม</span>
               <span>⭐ 4.8/5 ความพึงพอใจ</span>
             </div>
           </div>
 
-          {/* Image */}
           <div className="relative md:order-last order-first">
             <div className="rounded-2xl bg-white/5 p-2 ring-1 ring-white/10 shadow-xl transition hover:scale-[1.01]">
               <img

@@ -1,4 +1,4 @@
-// Purpose: Zod schemas for forms
+// Zod schemas for forms
 import { z } from 'zod';
 
 export const CreateActivitySchema = z.object({

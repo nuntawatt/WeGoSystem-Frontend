@@ -1,4 +1,4 @@
-// Purpose: Socket.io chat (client-only demo) with typing + read receipts (stub)
+// Socket.io chat (client-only demo)
 import { useEffect, useRef, useState } from 'react';
 import { socket } from '../lib/socket';
 import { toast } from './Toasts';
@@ -12,7 +12,6 @@ export default function ChatPanel({ groupId }: { groupId: string }) {
   const endRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // try-connect (no backend? it won't connect—handled gracefully)
     if (!socket.connected) socket.connect();
 
     socket.emit('joinGroup', groupId);

@@ -1,4 +1,3 @@
-// Purpose: kept for completeness (not used in Navbar)
 import { useEffect, useState } from 'react';
 
 export default function ThemeToggle() {

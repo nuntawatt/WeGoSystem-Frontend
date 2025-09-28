@@ -1,4 +1,4 @@
-// frontend/src/pages/auth/SignIn.tsx
+// Sign in page
 import { useState } from 'react';
 import { SignInSchema } from '../../lib/validators';
 import { toast } from '../../components/Toasts';
@@ -101,7 +101,7 @@ export default function SignIn() {
 
           <div className="text-sm opacity-80 text-center">
             Create account ? <Link to="/auth/signup" className="underline">Sign up</Link> ·{' '}
-            <Link to="/auth/reset" className="underline">Reset password</Link>
+            <Link to="/auth/reset-password" className="underline">Reset password</Link>
           </div>
         </form>
       </div>

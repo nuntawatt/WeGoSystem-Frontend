@@ -1,4 +1,3 @@
-// Purpose: Vite + React + chunk split for faster loads
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 

@@ -1,4 +1,3 @@
-// Purpose: Theme deep-blue + gold, refined shadows
 export default {
   content: ['./index.html', './src/**/*.{ts,tsx,js,jsx}'],
   theme: {

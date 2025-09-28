@@ -1,4 +1,4 @@
-// frontend/src/pages/auth/SignUp.tsx
+// Sign up page
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
@@ -34,7 +34,6 @@ export default function SignUp() {
       } else if (code.includes('auth/weak-password')) {
         toast('รหัสผ่านน้อยเกินไป (อย่างน้อย 6 ตัวอักษร)');
       } else {
-        // ★ แก้วงเล็บ/แบ็กทิค
         toast(`สมัครไม่สำเร็จ: ${err?.message || 'Unknown error'}`);
       }
     } finally {

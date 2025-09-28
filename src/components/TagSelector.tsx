@@ -1,4 +1,3 @@
-// Purpose: tag input + chips + suggestions
 import { useState } from 'react';
 
 export default function TagSelector({

@@ -1,4 +1,4 @@
-// Purpose: fetch activities from API, fallback demo
+// fetch activities from API, fallback demo
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../lib/apiClient';
 
@@ -17,7 +17,7 @@ export function useActivities() {
     queryFn: async () => {
       const { data } = await api.get('/activities');
       if (Array.isArray(data)) return data as Activity[];
-      // fallback demo
+
       return [
         {
           _id: 'demo-1',

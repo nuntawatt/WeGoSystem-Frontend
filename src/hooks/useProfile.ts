@@ -4,7 +4,13 @@ import { db } from '../lib/firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { useAuth } from './useAuth';
 
-export type Profile = { displayName?: string; bio?: string; interests?: string[] };
+export type Profile = {
+  username?: string;           
+  displayName?: string;
+  bio?: string;
+  interests?: string[];
+  photoURL?: string;            
+};
 
 export function useProfile() {
   const { user } = useAuth();
@@ -16,19 +22,31 @@ export function useProfile() {
     enabled: !!user,
     queryFn: async () => {
       const snap = await getDoc(doc(db, 'profiles', uid));
-      return (snap.data() as Profile) || { displayName: user?.email || '', bio: '', interests: [] };
-    }
+      const raw = (snap.data() as Profile) || {};
+
+      const emailPrefix = user?.email?.split('@')[0] || '';
+      const username = raw.username || emailPrefix;
+      const displayName = raw.displayName || user?.displayName || username;
+
+      return {
+        username,
+        displayName,
+        bio: raw.bio || '',
+        interests: raw.interests || [],
+        photoURL: raw.photoURL || user?.photoURL || '',
+      };
+    },
   });
 
   const m = useMutation({
-    mutationFn: async (p: Profile) => {
+    mutationFn: async (p: Partial<Profile>) => {
       if (!user) throw new Error('not signed in');
       await setDoc(doc(db, 'profiles', uid), p, { merge: true });
       return p;
     },
     onSuccess: (p) => {
-      qc.setQueryData(['profile', uid], p);
-    }
+      qc.setQueryData<Profile>(['profile', uid], (old) => ({ ...(old || {}), ...(p || {}) }));
+    },
   });
 
   return { ...q, updateProfile: m.mutateAsync };

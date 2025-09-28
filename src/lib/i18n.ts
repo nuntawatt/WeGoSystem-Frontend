@@ -1,4 +1,4 @@
-// Purpose: i18n scaffold (EN/TH sample)
+// i18n scaffold (EN/TH sample)
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 

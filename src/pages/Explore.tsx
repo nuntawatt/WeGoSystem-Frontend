@@ -1,16 +1,12 @@
-// Explore Events with search + tag filter + cards grid
 import { useMemo, useState } from 'react';
-import { DEMO_EVENTS, ALL_TAGS, EventItem, DEMO_REVIEWS } from '../lib/demoData';
+import { DEMO_EVENTS, ALL_TAGS, EventItem} from '../lib/demoData';
 import TagFilterBar from '../components/TagFilterBar';
 import EventCard from '../components/EventCard';
-import ReviewSummary from '../components/ReviewSummary';
-
 
 export default function Explore() {
   const [q, setQ] = useState('');
   const [tags, setTags] = useState<string[]>([]);
   const toggleTag = (t: string) => setTags((s) => (s.includes(t) ? s.filter((x) => x !== t) : [...s, t]));
-
 
   const filtered = useMemo(() => {
     let arr: EventItem[] = [...DEMO_EVENTS];
@@ -22,7 +18,6 @@ export default function Explore() {
     return arr.sort((a, b) => (b.popularity ?? 0) - (a.popularity ?? 0));
   }, [q, tags]);
 
-
   return (
     <section className="container-app py-10 text-white space-y-6">
       <header className="text-center space-y-2">
@@ -32,9 +27,7 @@ export default function Explore() {
         <p className="opacity-90">Find buddies and groups</p>
       </header>
 
-
       <TagFilterBar allTags={ALL_TAGS} active={tags} onToggle={toggleTag} query={q} onQuery={setQ} />
-
 
       {filtered.length ? (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
@@ -46,7 +39,6 @@ export default function Explore() {
           <div className="opacity-80">ลองลบตัวกรองหรือพิมพ์คำค้นใหม่อีกครั้ง</div>
         </div>
       )}
-
 
 
       <p className="text-center text-sm opacity-70">* Demo dataset — เมื่อเชื่อมต่อ Backend จะใช้ข้อมูลจริง/Realtime</p>

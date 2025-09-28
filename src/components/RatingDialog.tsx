@@ -1,4 +1,3 @@
-// Purpose: Simple rating UI
 import { useState } from 'react';
 import { toast } from './Toasts';
 
