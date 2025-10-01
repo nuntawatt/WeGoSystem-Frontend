@@ -17,7 +17,7 @@ export default function Home() {
             <h1 className="text-4xl md:text-5xl font-extrabold leading-tight tracking-tight">
               ไปคนเดียวไม่ต้องเหงา <br />
               <span className="brand-gradient">
-                เพราะเราจะหาคนไปด้วยให้คุณ
+                เพราะเราจะหาคนไปด้วย
               </span>
             </h1>
 
@@ -54,7 +54,7 @@ export default function Home() {
           <div className="relative md:order-last order-first">
             <div className="rounded-2xl bg-white/5 p-2 ring-1 ring-white/10 shadow-xl transition hover:scale-[1.01]">
               <img
-                src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=1600&auto=format&fit=crop"
+                src="https://i.pinimg.com/1200x/54/57/24/545724f929914db48a3d1964f983f755.jpg"
                 alt="Friends doing activities together"
                 className="h-auto w-full rounded-xl object-cover aspect-[16/10] ring-1 ring-white/10"
               />
